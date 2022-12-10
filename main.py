@@ -6,7 +6,6 @@ from discord.ext import commands, tasks
 
 intents = discord.Intents.default()
 intents.message_content = True
-intents.members = True
 
 client = commands.Bot(command_prefix='!', intents=intents)
 
@@ -17,7 +16,7 @@ reply_choice = ['khodeti!', "bi tarbiat!", 'chendesh', 'dige tekrar nashe']
 @client.event
 async def on_ready():
     print(f'We have logged in as {client.user}')
-    myLoop.start()
+    set_activity.start()
 
 
 @client.event
@@ -38,12 +37,10 @@ async def clear(ctx, arg):
     await ctx.channel.purge(limit=(int(arg) + 1))
 
 
-@tasks.loop(seconds=1)
-async def myLoop():
+@tasks.loop(seconds=10)
+async def set_activity():
     guild = client.get_guild(1021834785557073980)
-    print(guild)
     mc = guild.member_count
-    print(mc)
     await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching,name="" + str(mc)),status=discord.Status.do_not_disturb)
 
 
