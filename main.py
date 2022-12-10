@@ -1,10 +1,14 @@
 import discord
+import random
+import Data
 
 intents = discord.Intents.default()
 intents.message_content = True
 
 client = discord.Client(intents=intents)
 
+bad_words = ['avazi', 'khafe sho', 'bi tarbiat', 'bi shoor', 'oskol']
+reply_choice = ['khodeti!', "bi tarbiat!", 'chendesh', 'dige tekrar nashe']
 
 @client.event
 async def on_ready():
@@ -13,12 +17,13 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    print(message.content)
     if message.author == client.user:
         return
 
-    if message.content.startswith('$hello'):
-        await message.channel.send('Hello!')
+    for word in bad_words:
+      if word in message.content:
+        await message.delete()
+        await message.channel.send(f"{message.author.mention}" + " " + random.choice(reply_choice))
 
 
-client.run('OTAxODI3NzE2NzA0MjU2MDEw.GM6IsP.mNsx47SBzRWGz_Azq5Wgt9xSFYCevCNNTUlCC0')
+client.run(Data.token)
